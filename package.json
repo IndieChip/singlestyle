@@ -4,13 +4,17 @@
   "publisher": "indiechip",
   "description": "",
   "version": "0.0.1",
-  "icon": "src/icon.png",
+  "icon": "./extension/icon.png",
   "engines": {
     "vscode": "^1.95.0"
   },
   "categories": [
     "Other"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IndieChip/singlestyle.git"
+  },
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
