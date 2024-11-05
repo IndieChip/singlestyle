@@ -27,21 +27,25 @@ exports.activate = activate;
 exports.deactivate = deactivate;
 const vscode = __importStar(require("vscode"));
 function activate(context) {
-    const disposable = vscode.commands.registerCommand('singlestyle.single', () => {
+    const disposable = vscode.commands.registerCommand('singless.convert', () => {
         const editor = vscode.window.activeTextEditor;
         if (editor) {
             const selection = editor.selection;
             const text = editor.document.getText(selection);
-            // Logic to convert selected CSS to a single line
-            const singleLineText = text
-                .replace(/\s+/g, ' ') // Replace multiple spaces with a single space
-                .replace(/\s*;\s*/g, '; ') // Ensure spaces around semicolons
-                .replace(/\s*{\s*/g, '{ ') // Ensure spaces around opening braces
-                .replace(/\s*}\s*/g, '} ') // Ensure spaces around closing braces
-                .trim(); // Trim leading and trailing spaces
+            const lineCount = selection.end.line - selection.start.line + 1;
+            const formatedText = (lineCount > 1) ? text
+                .replace(/\s+/g, ' ')
+                .replace(/\s*;\s*/g, '; ')
+                .replace(/\s*{\s*/g, '{ ')
+                .replace(/\s*}\s*/g, '} ')
+                .trim() : text
+                .replace(/;\s*/g, ';\n\t')
+                .replace(/\{\s*/g, '{\n\t')
+                .replace(/\s*\}/g, '\n}')
+                .trim();
             // Replace the selected text with the single line version
             editor.edit(editBuilder => {
-                editBuilder.replace(selection, singleLineText);
+                editBuilder.replace(selection, formatedText);
             });
         }
     });
